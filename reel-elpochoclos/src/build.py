@@ -15,7 +15,8 @@ OUT = Path(__file__).resolve().parent.parent / "output"
 FF = imageio_ffmpeg.get_ffmpeg_exe()
 RAW_V, RAW_A = OUT / "_video_mudo_raw.mp4", OUT / "_audio_raw.wav"
 
-VIDEO = ["-c:v", "libx264", "-preset", "slow", "-crf", "17", "-maxrate", "16M", "-bufsize", "32M",
+# 10,5 Mbps en dos pasadas: cada MP4 queda por debajo de 30 MB (Instagram lo recomprime igual a ~3-5 Mbps)
+VIDEO = ["-c:v", "libx264", "-preset", "slow", "-b:v", "10500k", "-maxrate", "14M", "-bufsize", "21M",
          "-profile:v", "high", "-level", "4.2", "-pix_fmt", "yuv420p", "-r", "30", "-g", "30",
          "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709", "-movflags", "+faststart"]
 
@@ -31,7 +32,9 @@ m = json.loads(re.search(r"\{[^{}]*\"input_i\"[^{}]*\}", meas, re.S).group(0))
 af = (f"loudnorm={target}:measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}"
       f":measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true,aresample=48000")
 
-run(["-i", str(RAW_V), "-an", *VIDEO, str(OUT / "elpochoclos-reel-mudo.mp4")])
-run(["-i", str(RAW_V), "-i", str(RAW_A), "-map", "0:v", "-map", "1:a", *VIDEO,
+PASS = str(OUT / "_x264pass")
+run(["-i", str(RAW_V), "-an", *VIDEO, "-pass", "1", "-passlogfile", PASS, "-f", "mp4", "/dev/null"])
+run(["-i", str(RAW_V), "-an", *VIDEO, "-pass", "2", "-passlogfile", PASS, str(OUT / "elpochoclos-reel-mudo.mp4")])
+run(["-i", str(RAW_V), "-i", str(RAW_A), "-map", "0:v", "-map", "1:a", *VIDEO, "-pass", "2", "-passlogfile", PASS,
      "-af", af, "-c:a", "aac", "-b:a", "320k", "-ar", "48000", "-shortest", str(OUT / "elpochoclos-reel-con-audio.mp4")])
 print("ok")
