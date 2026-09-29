@@ -197,6 +197,18 @@ def pop():
     return fades(b * 2 + np.sin(2 * np.pi * rng.uniform(180, 380) * t) * np.exp(-t / .008) * .5, .0003, .01)
 
 
+def kernel_pop():
+    """Estallido de un pochoclo: crack corto de banda ancha + cuerpo grave + un soplido de vapor."""
+    t = tt(.12)
+    crack = filt(noise(.12), "bandpass", [rng.uniform(700, 1300), rng.uniform(4000, 8000)]) * np.exp(-t / rng.uniform(.0025, .006))
+    if rng.random() < .5:
+        i = int(rng.uniform(.002, .007) * SR)
+        crack[i:] += crack[:len(crack) - i] * rng.uniform(.3, .7)
+    body = sweep_sine(60 + rng.uniform(150, 320) * np.exp(-t / .02)) * np.exp(-t / .018) * .6
+    hiss = filt(noise(.12), "highpass", 5000) * np.exp(-t / .04) * .08
+    return fades(crack * 2.2 + body + hiss, .0002, .02)
+
+
 def tap():
     """Cartita de papel que cae."""
     t = tt(.08)
@@ -431,8 +443,6 @@ for at in (16.45, 16.7, 16.95):
     add(filt(kick(.2), "highpass", 150), at, db(-22))
 add(boom(1.5, 44, 180, .55), 17.25, db(-6), rev=.3)
 add(kaching(), 17.3, db(-9), rev=.25)
-for _ in range(18):
-    add(pop(), 17.26 + rng.gamma(1.5, .08), db(rng.uniform(-24, -17)), pan=rng.uniform(-.9, .9))
 for i, f in enumerate([587.33, 698.46, 783.99]):
     add(pluck(f, .4), 17.75 + i * .2 + .08, db(-18), rev=.3)
 add(shimmer(.9, 8), 18.2, db(-22), rev=.4)
@@ -444,14 +454,22 @@ for at in (20.1, 20.35):
     add(boom(.8, 50, 160, .25), at, db(-11))
 add(boom(1.6, 44, 180, .6), 20.85, db(-6), rev=.3)
 add(brass([98.0, 196.0, 233.08, 293.66], 1.2), 20.85, db(-13), rev=.3)
-for _ in range(14):
-    add(pop(), 20.86 + rng.gamma(1.5, .08), db(rng.uniform(-24, -17)), pan=rng.uniform(-.9, .9))
 add(pop(), 21.62, db(-16))
 add(typing(8, .06), 21.95, db(-15), pan=-.1)
 add(bloop(), 22.5, db(-14), rev=.2)
 add(whoosh(.4, 600, 5000, -.4, .9), 22.52, db(-18))
 add(whoosh(.3, 1500, 6000, .2, .8), 22.6, db(-24))
 add(chime([1568.0, 2349.3]), 23.0, db(-22), rev=.4)
+
+
+# pochoclos 3D: cada estallido de la coreografía (popdata.py) suena en su cuadro
+from popdata import build as build_pops
+
+_, POP_SOUNDS = build_pops()
+for ts in POP_SOUNDS:
+    add(kernel_pop(), ts, db(rng.uniform(-18, -11) if ts < 3 else rng.uniform(-22, -15)), pan=rng.uniform(-.8, .8), rev=.08)
+add(whoosh(.5, 300, 5000, -.8, .8), 0.0, db(-17))
+add(whoosh(.6, 250, 4500, .6, -.6), 10.1, db(-18))
 
 
 # ------------------------------------------------------------------ reverb + máster
