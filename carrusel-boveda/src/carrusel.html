@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Carrusel La Bóveda Pochoclera</title>
+<link rel="stylesheet" href="../../reel-boveda/assets/fonts/fonts.css">
+<style>
+:root{--paper2:#E6D2A6;--red:#B02A1E;--red2:#8A1D14;--ink:#2B241C;--cream:#F5E9CE}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:8640px;height:1350px;overflow:hidden;background:#000}
+#stage{position:absolute;left:0;top:0;width:8640px;height:1350px;overflow:hidden;background:url(../assets/paper-pano.jpg)}
+.L{position:absolute;inset:0}
+.slide{position:absolute;top:0;width:1080px;height:1350px}
+.row{position:absolute;left:0;width:1080px;text-align:center;white-space:nowrap}
+.anton{font-family:'Anton';font-weight:400;line-height:1;text-transform:uppercase}
+.osw{font-family:'Oswald';font-weight:700;text-transform:uppercase}
+.bar{font-family:'Barlow SC';font-weight:800}
+.red{color:var(--red)}.ink{color:var(--ink)}.cream{color:var(--cream)}
+.abs{position:absolute}
+.rays{position:absolute;width:2200px;height:2200px;margin:-1100px 0 0 -1100px;
+  background:repeating-conic-gradient(from 0deg, rgba(176,42,30,.2) 0deg 4.5deg, rgba(176,42,30,0) 4.5deg 15deg);
+  -webkit-mask-image:radial-gradient(circle, rgba(0,0,0,0) 0 140px, #000 160px, rgba(0,0,0,.5) 400px, transparent 640px)}
+.rays.cr{background:repeating-conic-gradient(from 0deg, rgba(245,233,206,.16) 0deg 5deg, rgba(245,233,206,0) 5deg 14deg);
+  -webkit-mask-image:radial-gradient(circle, #000 0 18%, transparent 58%)}
+.divider{position:absolute;left:170px;width:740px;height:30px;display:flex;align-items:center;gap:18px}
+.divider i{flex:1;height:4px;background:var(--red)}
+.divider svg{width:30px;height:30px}
+.brush{position:absolute;background:url(../../reel-boveda/assets/brush1.png) center/100% 100% no-repeat}
+.brush.b2{background-image:url(../../reel-boveda/assets/brush2.png)}
+.pc{position:absolute;background-repeat:no-repeat;filter:drop-shadow(10px 14px 10px rgba(43,30,15,.38))}
+.pc.blur{filter:blur(7px)}
+/* marco continuo: reglas arriba y abajo en todo el panorama, laterales sólo en la primera y la última placa */
+.rule{position:absolute;background:var(--red)}
+/* tarjetas */
+.card{position:absolute;width:150px;height:210px;margin:-105px 0 0 -75px;border-radius:12px;border:5px solid var(--ink);overflow:hidden;box-shadow:8px 10px 0 rgba(43,36,28,.22)}
+.card .art{position:absolute;left:0;top:0;right:0;height:140px;display:flex;align-items:center;justify-content:center}
+.card .art svg{width:62px;height:62px}
+.card .tx{position:absolute;left:14px;right:14px;bottom:16px}
+.card .tx i{display:block;height:10px;border-radius:5px;margin-top:9px}
+/* píldoras */
+.pill{position:absolute;left:64px;width:510px;height:92px;border-radius:16px;background:var(--red);display:flex;align-items:center;
+  box-shadow:inset 0 0 0 4px var(--red),inset 0 0 0 7px var(--cream),10px 12px 0 rgba(43,36,28,.22)}
+.pill .ic{width:108px;height:108px;margin-left:-22px;border-radius:50%;background:var(--red);border:5px solid var(--cream);box-shadow:0 0 0 5px var(--red);display:flex;align-items:center;justify-content:center;flex:none}
+.pill .ic svg{width:58px;height:58px}
+.pill span{font-family:'Oswald';font-weight:700;font-size:50px;letter-spacing:.05em;color:var(--cream);margin-left:28px}
+/* ticket */
+.ticket{position:absolute;width:800px;height:290px;background:var(--red);
+  -webkit-mask:radial-gradient(circle at 0 50%, transparent 44px, #000 45px) left/51% 100% no-repeat,radial-gradient(circle at 100% 50%, transparent 44px, #000 45px) right/51% 100% no-repeat}
+.ticket.sh{background:rgba(43,36,28,.22)}
+.ticket .in{position:absolute;inset:20px 66px;border:4px dashed rgba(245,233,206,.85);border-radius:10px}
+.chip{position:absolute;width:300px;text-align:center}
+.chip .ci{width:92px;height:92px;margin:0 auto;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px var(--cream),0 0 0 8px var(--red)}
+.chip .ci svg{width:52px;height:52px}
+.chip div+div{margin-top:14px;font-family:'Oswald';font-weight:700;font-size:31px;line-height:1.1;color:var(--ink);letter-spacing:.04em}
+.step .num{position:absolute;left:80px;width:150px;height:150px;border-radius:50%;background:var(--red);box-shadow:0 0 0 6px var(--cream),0 0 0 11px var(--red),10px 12px 0 11px rgba(43,36,28,.18);
+  display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:96px;color:var(--cream)}
+.step .t{position:absolute;left:272px;font-family:'Anton';font-size:74px;line-height:1;color:var(--red);white-space:nowrap}
+.step .s{position:absolute;left:274px;font-family:'Barlow SC';font-weight:600;font-size:40px;color:var(--ink);white-space:nowrap}
+#wear{background:url(../assets/wear-pano.png);pointer-events:none}
+</style>
+</head>
+<body>
+<div id="stage">
+ <div id="back" class="L"></div>
+
+ <!-- ============ PLACA 1 · GANCHO ============ -->
+ <div class="slide" style="left:0">
+  <div class="rays" style="left:540px;top:150px"></div>
+  <img class="abs" src="../../reel-boveda/assets/badge-rojo.png" style="left:458px;top:52px;width:164px">
+  <div class="row anton red" style="top:236px;font-size:196px">¿NUNCA</div>
+  <div class="row anton red" style="top:467px;font-size:196px">SABÉS</div>
+  <div class="row anton red" style="top:698px;font-size:196px">QUÉ VER?</div>
+  <img class="abs" src="../../reel-boveda/assets/bucket.png" style="left:618px;top:812px;width:410px">
+  <div class="abs anton red" style="left:74px;top:934px;font-size:66px;line-height:1.08;text-transform:uppercase">La Bóveda<br>Pochoclera</div>
+  <div class="abs bar ink" style="left:76px;top:1090px;width:520px;font-weight:600;font-size:35px;line-height:1.2">Un canal de Telegram con todo el cine curado y ordenado.</div>
+  <div class="abs osw cream" style="left:74px;top:1196px;padding:12px 30px 14px;background:var(--red);border-radius:44px;font-size:40px;letter-spacing:.1em;box-shadow:8px 10px 0 rgba(43,36,28,.22)">DESLIZÁ →</div>
+ </div>
+
+ <!-- ============ PLACA 2 · DOLOR ============ -->
+ <div class="slide" style="left:1080px">
+  <div class="abs" style="left:90px;top:96px;width:900px;padding:34px 30px 40px;background:var(--cream);border:5px solid var(--red);box-shadow:0 0 0 10px var(--cream),0 0 0 13px var(--red),16px 20px 0 13px rgba(43,36,28,.2)">
+    <p class="bar ink" style="font-size:64px;line-height:1.1;text-align:center">Tenés <span class="red">mil plataformas,</span><br><span class="red">mil listas</span> y <span class="red">mil</span><br><span class="red">recomendaciones sueltas…</span></p>
+  </div>
+  <div class="abs" style="left:150px;top:470px;width:780px;height:600px;border-radius:36px;background:#1C1711;border:6px solid var(--ink);box-shadow:16px 20px 0 rgba(43,36,28,.25)">
+    <svg class="abs" style="left:684px;top:14px;width:70px;height:70px" viewBox="0 0 100 100"><defs><mask id="mm"><rect width="100" height="100" fill="#fff"/><circle cx="66" cy="38" r="38" fill="#000"/></mask></defs><circle cx="50" cy="50" r="44" fill="#F5E9CE" mask="url(#mm)"/></svg>
+    <div class="abs bar cream" style="left:0;width:768px;top:44px;text-align:center;font-size:46px">…pero cuando llega la noche</div>
+    <svg class="abs" style="left:214px;top:120px;width:340px;height:340px" viewBox="-100 -100 200 200"><circle r="86" fill="none" stroke="#F5E9CE" stroke-width="7" opacity=".3"/><circle r="86" fill="none" stroke="#F0775F" stroke-width="7" stroke-dasharray="470 540" transform="rotate(-90)" stroke-linecap="round"/><rect x="-12" y="-112" width="24" height="16" rx="4" fill="#F5E9CE" opacity=".6"/></svg>
+    <div class="abs anton cream" style="left:0;width:768px;top:222px;text-align:center;font-size:136px">30:00</div>
+    <div class="abs bar cream" style="left:0;width:768px;top:486px;text-align:center;font-size:46px">terminás <span style="color:#F0775F">scrolleando media hora.</span></div>
+  </div>
+ </div>
+
+ <!-- ============ PLACA 3 · GIRO ============ -->
+ <div class="slide" style="left:2160px">
+  <div class="row anton ink" style="top:92px;font-size:92px">EL PROBLEMA NO ES</div>
+  <div class="row anton ink" style="top:196px;font-size:128px">FALTA DE CINE.</div>
+  <div class="row anton red" style="top:348px;font-size:110px">ES FALTA DE ORDEN.</div>
+  <svg class="abs" style="left:0;top:0;width:1080px;height:1350px;overflow:visible" viewBox="0 0 1080 1350">
+    <path d="M420 930 C 470 860, 540 860, 590 900" fill="none" stroke="#B02A1E" stroke-width="11" stroke-linecap="round"/>
+    <path d="M556 872 L596 904 L552 928" fill="none" stroke="#B02A1E" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <div id="grid"></div>
+ </div>
+
+ <!-- ============ PLACA 4 · SOLUCIÓN ============ -->
+ <div class="slide" style="left:3240px;background:var(--red)">
+  <div class="rays cr" style="left:540px;top:700px"></div>
+ </div>
+ <div class="brush" style="left:2540px;top:465px;width:1500px;height:420px;transform:rotate(90deg)"></div>
+ <div class="slide" style="left:3240px">
+  <div class="row anton cream" style="top:66px;font-size:168px">LA BÓVEDA</div>
+  <div class="row anton cream" style="top:258px;font-size:140px">POCHOCLERA</div>
+  <div class="abs" style="left:290px;top:450px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle, #FFF6DF 0%, #F5E0B0 24%, #3a2c20 62%, #1C1711 100%);border:10px solid var(--ink)"></div>
+  <div class="abs" style="left:-228px;top:400px;width:600px;height:600px;perspective:1300px">
+    <svg style="width:600px;height:600px;transform-origin:88% 50%;transform:rotateY(62deg);filter:drop-shadow(16px 18px 0 rgba(43,36,28,.3))" viewBox="-400 -400 800 800" id="vault"></svg>
+  </div>
+  <img class="abs" src="../../reel-boveda/assets/badge-crema.png" style="left:352px;top:512px;width:376px;transform:rotate(-8deg);filter:drop-shadow(0 18px 24px rgba(0,0,0,.35))">
+  <div class="abs osw red" style="left:540px;top:992px;height:92px;padding:0 70px;transform:translateX(-50%);background:var(--cream);font-size:48px;letter-spacing:.08em;display:flex;align-items:center;white-space:nowrap;clip-path:polygon(0 0,100% 0,96% 50%,100% 100%,0 100%,4% 50%)">UN CANAL DE TELEGRAM</div>
+  <div class="row bar cream" style="top:1118px;font-weight:600;font-size:42px;line-height:1.25">Pensado para tener cine ordenado,<br>actualizado y fácil de encontrar.</div>
+ </div>
+
+ <!-- ============ PLACA 5 · QUÉ HAY ============ -->
+ <div class="slide" style="left:4320px">
+  <div class="row anton red" style="top:74px;font-size:124px">ACÁ ESTÁ TODO</div>
+  <div class="row anton red" style="top:218px;font-size:98px">CURADO Y ORDENADO</div>
+  <div class="divider" style="top:338px"><i></i><svg viewBox="0 0 24 24"><path d="M12 1.5l3.1 6.9 7.4.7-5.6 5 1.6 7.4L12 17.8l-6.5 3.7 1.6-7.4-5.6-5 7.4-.7z" fill="#B02A1E"/></svg><i></i></div>
+  <div id="pills"></div>
+  <div class="abs" id="catalog" style="left:612px;top:396px;width:404px;height:552px;background:#F3E4C4;border:5px solid var(--red);box-shadow:0 0 0 8px #F3E4C4,0 0 0 11px var(--red),14px 16px 0 11px rgba(43,36,28,.2);transform:rotate(2.5deg)"></div>
+ </div>
+ <div class="brush" style="left:4280px;top:1000px;width:1480px;height:330px;transform:rotate(-3deg)"></div>
+ <div class="slide" style="left:4320px">
+  <div class="row anton cream" style="top:1072px;font-size:80px;transform:rotate(-3deg)">MENOS BÚSQUEDA.</div>
+  <div class="row anton cream" style="top:1148px;font-size:108px;transform:rotate(-3deg)">MÁS CINE.</div>
+ </div>
+
+ <!-- ============ PLACA 6 · CÓMO ENTRÁS ============ -->
+ <div class="slide" style="left:5400px">
+  <div class="rays" style="left:540px;top:120px"></div>
+  <div class="row anton red" style="top:66px;font-size:140px">¿CÓMO ENTRÁS?</div>
+  <div class="row bar ink" style="top:236px;font-size:52px">Así de simple:</div>
+  <svg class="abs" style="left:0;top:0;width:1080px;height:1350px;overflow:visible" viewBox="0 0 1080 1350">
+    <path d="M155 512 L155 586 M155 742 L155 816" stroke="#B02A1E" stroke-width="7" stroke-dasharray="4 14" stroke-linecap="round"/>
+    <path d="M170 980 C 260 1120, 520 1180, 760 1110 S 1030 1000, 1160 1060" fill="none" stroke="#B02A1E" stroke-width="7" stroke-dasharray="4 16" stroke-linecap="round"/>
+  </svg>
+  <div class="step"><div class="num" style="top:360px">1</div><div class="t" style="top:372px">COMENTÁ TELEGRAM</div><div class="s" style="top:462px">o mandame un mensaje directo</div></div>
+  <div class="step"><div class="num" style="top:590px">2</div><div class="t" style="top:602px">TE PASO TODO</div><div class="s" style="top:692px">por mensaje, sin vueltas</div></div>
+  <div class="step"><div class="num" style="top:820px">3</div><div class="t" style="top:832px">PAGO ÚNICO Y LISTO</div><div class="s" style="top:922px">y entrás a la bóveda</div></div>
+ </div>
+ <svg class="abs" style="left:6420px;top:1000px;width:120px;height:120px;transform:rotate(18deg)" viewBox="0 0 120 120" id="plane"></svg>
+
+ <!-- ============ PLACA 7 · OFERTA ============ -->
+ <div class="slide" style="left:6480px">
+  <div class="rays" style="left:540px;top:180px"></div>
+  <div class="row anton red" style="top:54px;font-size:176px">ACCESO</div>
+  <div class="row anton red" style="top:280px;font-size:176px">ÚNICO</div>
+  <div class="divider" style="top:476px"><i></i><svg viewBox="0 0 24 24"><path d="M12 1.5l3.1 6.9 7.4.7-5.6 5 1.6 7.4L12 17.8l-6.5 3.7 1.6-7.4-5.6-5 7.4-.7z" fill="#B02A1E"/></svg><i></i></div>
+  <div class="row osw ink" style="top:516px;font-size:38px;letter-spacing:.04em">UN SOLO PAGO. SIN VUELTAS. SIN MENSUALIDAD.</div>
+  <div class="ticket sh" style="left:156px;top:622px;transform:rotate(-3deg)"></div>
+  <div class="ticket" style="left:140px;top:604px;transform:rotate(-3deg)"><div class="in"></div>
+    <div class="anton cream" style="position:absolute;left:0;width:100%;top:24px;text-align:center;font-size:172px">$6000</div>
+    <div class="osw cream" style="position:absolute;left:0;width:100%;top:208px;text-align:center;font-size:44px;letter-spacing:.14em">★ PAGO ÚNICO ★</div></div>
+  <div class="chip" style="left:70px;top:948px"><div class="ci"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="#F5E9CE" stroke-width="2.6"/><path d="M6 18L18 6" stroke="#F5E9CE" stroke-width="2.6"/></svg></div><div>SIN<br>SUSCRIPCIÓN</div></div>
+  <div class="chip" style="left:390px;top:948px"><div class="ci"><svg viewBox="0 0 24 24"><path d="M3 7h18v3a2 2 0 000 4v3H3v-3a2 2 0 000-4z" fill="#F5E9CE"/><path d="M14 8v8" stroke="#B02A1E" stroke-width="1.6" stroke-dasharray="1.6 1.4"/></svg></div><div>ENTRÁS<br>UNA VEZ</div></div>
+  <div class="chip" style="left:710px;top:948px"><div class="ci"><svg viewBox="0 0 24 24"><path d="M7.5 10V7.5a4.5 4.5 0 019 0V10" fill="none" stroke="#F5E9CE" stroke-width="2.6"/><rect x="5" y="10" width="14" height="10.5" rx="2" fill="#F5E9CE"/><circle cx="12" cy="15" r="1.7" fill="#B02A1E"/></svg></div><div>ACCESO A<br>LA BÓVEDA</div></div>
+  <div class="abs" style="left:100px;top:1168px;width:880px;height:112px;border-radius:56px;background:var(--cream);border:5px solid var(--red);display:flex;align-items:center;gap:22px;padding:0 30px 0 16px;box-shadow:10px 12px 0 rgba(43,36,28,.18)">
+    <img src="../../reel-boveda/assets/badge-rojo.png" style="width:80px;height:80px;flex:none">
+    <div class="bar ink" style="font-weight:600;font-size:31px;line-height:1.2">Curado por <b style="font-weight:800;color:var(--red)">El Pochoclos</b>: 6 años recomendando cine a +77&nbsp;mil seguidorxs</div>
+  </div>
+ </div>
+
+ <!-- ============ PLACA 8 · ACCIÓN ============ -->
+ <div class="slide" style="left:7560px">
+  <div class="rays" style="left:540px;top:200px"></div>
+  <div class="row anton red" style="top:58px;font-size:170px">¿QUERÉS</div>
+  <div class="row anton red" style="top:276px;font-size:170px">MÁS INFO?</div>
+  <div class="row bar ink" style="top:484px;font-size:50px">Comentá la palabra:</div>
+  <div class="abs" style="left:150px;top:554px;width:780px;height:190px;background:var(--red);box-shadow:inset 0 0 0 7px var(--red),inset 0 0 0 11px var(--cream),14px 16px 0 rgba(43,36,28,.22);display:flex;align-items:center;justify-content:center;gap:34px">
+    <svg style="width:32px;height:32px" viewBox="0 0 24 24"><path d="M12 1.5l3.1 6.9 7.4.7-5.6 5 1.6 7.4L12 17.8l-6.5 3.7 1.6-7.4-5.6-5 7.4-.7z" fill="#F5E9CE"/></svg>
+    <span class="anton cream" style="font-size:142px">TELEGRAM</span>
+    <svg style="width:32px;height:32px" viewBox="0 0 24 24"><path d="M12 1.5l3.1 6.9 7.4.7-5.6 5 1.6 7.4L12 17.8l-6.5 3.7 1.6-7.4-5.6-5 7.4-.7z" fill="#F5E9CE"/></svg>
+  </div>
+  <div class="row bar ink" style="top:772px;font-size:54px">y te paso todo.</div>
+  <div class="abs" style="left:90px;top:876px;width:660px;height:104px;border-radius:52px;background:var(--cream);border:5px solid var(--ink);display:flex;align-items:center;gap:20px;padding:0 18px;box-shadow:10px 12px 0 rgba(43,36,28,.22)">
+    <div style="width:70px;height:70px;border-radius:50%;flex:none;background:url(../../reel-boveda/assets/badge-rojo.png) center/cover;border:3px solid var(--ink)"></div>
+    <div class="bar ink" style="flex:1;font-size:48px">TELEGRAM<span style="display:inline-block;width:5px;height:46px;background:var(--red);vertical-align:-7px;margin-left:5px"></span></div>
+    <div style="width:70px;height:70px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;flex:none"><svg style="width:38px;height:38px" viewBox="0 0 24 24"><path d="M3 11.5L21 4l-6.5 16-3.2-6.3z" fill="#F5E9CE"/></svg></div>
+  </div>
+  <svg class="abs" style="left:0;top:0;width:1080px;height:1350px;overflow:visible" viewBox="0 0 1080 1350">
+    <path d="M150 1000 C 110 1080, 100 1160, 132 1250" fill="none" stroke="#B02A1E" stroke-width="10" stroke-linecap="round"/>
+    <path d="M100 1222 L132 1256 L162 1218" fill="none" stroke="#B02A1E" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <div class="abs osw ink" style="left:220px;top:1170px;font-size:36px;letter-spacing:.06em;display:flex;align-items:center;gap:14px">
+    <svg style="width:40px;height:40px" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4.5L6 21z" fill="#B02A1E"/></svg>GUARDÁ ESTE POST</div>
+  <img class="abs" src="../../reel-boveda/assets/bucket.png" style="left:742px;top:902px;width:330px">
+ </div>
+
+ <div id="front" class="L"></div>
+ <div id="frame" class="L"></div>
+ <div id="wear" class="L"></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const INK = '#2B241C', RED = '#B02A1E', RED2 = '#8A1D14', CREAM = '#F5E9CE', PAPER2 = '#E6D2A6';
+function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const lerp = (a, b, x) => a + (b - a) * x;
+
+// ---- bóveda (mismo dibujo que el reel)
+const HATCH = `<pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(40)"><rect width="10" height="3.2" fill="${INK}" opacity=".28"/></pattern>`;
+(function vault() {
+  let s = `<defs>${HATCH}<radialGradient id="vg" cx="40%" cy="35%"><stop offset="0" stop-color="#F4E4C0"/><stop offset="1" stop-color="#D9C08E"/></radialGradient></defs>`;
+  s += `<circle r="392" fill="${INK}"/><circle r="378" fill="${RED}"/><circle r="378" fill="url(#hatch)" opacity=".5"/>`;
+  s += `<circle r="352" fill="url(#vg)" stroke="${INK}" stroke-width="7"/>`;
+  for (let i = 0; i < 20; i++) { const a = i * Math.PI / 10; s += `<circle cx="${(322 * Math.cos(a)).toFixed(1)}" cy="${(322 * Math.sin(a)).toFixed(1)}" r="15" fill="${RED}" stroke="${INK}" stroke-width="4"/>`; }
+  s += `<circle r="292" fill="none" stroke="${INK}" stroke-width="6"/><circle r="280" fill="none" stroke="${RED}" stroke-width="5"/>`;
+  s += `<path d="M0 -292 A292 292 0 0 1 0 292 A292 292 0 0 0 0 -292" fill="url(#hatch)" opacity=".6"/><g transform="rotate(40)">`;
+  for (let i = 0; i < 3; i++) {
+    s += `<g transform="rotate(${i * 120})"><rect x="-17" y="-222" width="34" height="222" fill="${INK}"/><rect x="-10" y="-215" width="20" height="210" fill="${RED}"/>`;
+    s += `<circle cy="-222" r="30" fill="${RED}" stroke="${INK}" stroke-width="6"/><circle cy="-222" r="10" fill="${CREAM}"/></g>`;
+  }
+  s += `<circle r="170" fill="none" stroke="${INK}" stroke-width="36"/><circle r="170" fill="none" stroke="${RED}" stroke-width="22"/>`;
+  s += `<circle r="68" fill="${RED}" stroke="${INK}" stroke-width="7"/><circle r="26" fill="${CREAM}" stroke="${INK}" stroke-width="5"/></g>`;
+  $('vault').innerHTML = s;
+})();
+$('plane').innerHTML = `<path d="M10 58 L110 14 L84 104 L58 78 Z" fill="${CREAM}" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/><path d="M110 14 L58 78 L52 104 L46 70" fill="none" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>`;
+
+// ---- píldoras
+const ICONS = {
+  reel: `<circle cx="32" cy="32" r="27" fill="none" stroke="${CREAM}" stroke-width="5"/>` + [0, 1, 2, 3, 4].map(i => { const a = i * 2 * Math.PI / 5 - Math.PI / 2; return `<circle cx="${32 + 14 * Math.cos(a)}" cy="${32 + 14 * Math.sin(a)}" r="6" fill="${CREAM}"/>`; }).join('') + `<circle cx="32" cy="32" r="3.5" fill="${CREAM}"/>`,
+  tv: `<rect x="6" y="12" width="52" height="34" rx="5" fill="none" stroke="${CREAM}" stroke-width="5"/><path d="M22 56h20M32 46v10" stroke="${CREAM}" stroke-width="5" stroke-linecap="round"/>`,
+  star: `<path d="M32 5l8.3 18.4 20 1.9-15 13.4 4.3 19.7L32 48.4 14.4 58.4l4.3-19.7-15-13.4 20-1.9z" fill="${CREAM}"/>`,
+  clap: `<rect x="7" y="26" width="50" height="30" rx="3" fill="${CREAM}"/><path d="M7 16l48-9 2 11-48 9z" fill="${CREAM}"/><path d="M17 14l7 10M29 12l7 10M41 10l7 10" stroke="${RED}" stroke-width="4"/>`,
+  cc: `<rect x="5" y="12" width="54" height="40" rx="8" fill="none" stroke="${CREAM}" stroke-width="5"/><text x="32" y="42" text-anchor="middle" font-family="Anton" font-size="26" fill="${CREAM}">CC</text>`,
+};
+$('pills').innerHTML = [['reel', 'PELÍCULAS'], ['tv', 'SERIES'], ['star', 'ESTRENOS'], ['clap', 'CLÁSICOS'], ['cc', 'SUBTITULADO']]
+  .map(([ic, tx], i) => `<div class="pill" style="top:${400 + i * 112}px"><div class="ic"><svg viewBox="0 0 64 64">${ICONS[ic]}</svg></div><span>${tx}</span></div>`).join('');
+
+// ---- ficha de catálogo (géneros de la placa original)
+const CAT = [
+  ['ACCIÓN', `<path d="M12 3l2.6 5.8 6.3.6-4.8 4.2 1.4 6.2L12 16.6l-5.5 3.2 1.4-6.2L3.1 9.4l6.3-.6z" fill="${RED}"/>`],
+  ['COMEDIA', `<circle cx="12" cy="12" r="9" fill="none" stroke="${RED}" stroke-width="2.4"/><circle cx="9" cy="10" r="1.3" fill="${RED}"/><circle cx="15" cy="10" r="1.3" fill="${RED}"/><path d="M8 14c1 2 2.4 2.8 4 2.8s3-.8 4-2.8" fill="none" stroke="${RED}" stroke-width="2.2" stroke-linecap="round"/>`],
+  ['DRAMA', `<path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0112 7.6 4.3 4.3 0 0119.5 10c0 5.4-7.5 10-7.5 10z" fill="${RED}"/>`],
+  ['TERROR', `<path d="M12 3c-4.4 0-7.5 3-7.5 7 0 2.6 1.3 4.2 2.8 5.2V19h9.4v-3.8c1.5-1 2.8-2.6 2.8-5.2 0-4-3.1-7-7.5-7z" fill="${RED}"/><circle cx="9.2" cy="11" r="1.9" fill="#F3E4C4"/><circle cx="14.8" cy="11" r="1.9" fill="#F3E4C4"/><path d="M10 17v2M12 17v2M14 17v2" stroke="#F3E4C4" stroke-width="1.2"/>`],
+  ['DOCUMENTALES', `<rect x="3" y="10" width="18" height="10" rx="1.5" fill="${RED}"/><path d="M3 7l17-3 .6 3.4-17 3z" fill="${RED}"/><path d="M7 6.5l2.4 3M11.5 5.7l2.4 3M16 4.9l2.4 3" stroke="#F3E4C4" stroke-width="1.4"/>`],
+];
+$('catalog').innerHTML = `<div class="osw" style="padding:26px 0 18px;text-align:center;color:${RED};font-size:44px;letter-spacing:.14em;border-bottom:4px solid ${RED};margin:0 24px">CATÁLOGO</div>` +
+  CAT.map(([t, ic]) => `<div style="display:flex;align-items:center;gap:18px;margin:0 26px;padding:11px 0 10px;border-bottom:3px dotted rgba(43,36,28,.35)">
+    <div style="width:62px;height:62px;border-radius:50%;border:4px solid ${RED};display:flex;align-items:center;justify-content:center;flex:none"><svg style="width:36px;height:36px" viewBox="0 0 24 24">${ic}</svg></div>
+    <div class="osw" style="font-size:36px;color:${INK};letter-spacing:.05em">${t}</div></div>`).join('');
+
+// ---- tarjetas: caos (placas 2 y 3) y orden (placa 3)
+const CARD_STYLES = [
+  {bg: RED, art: CREAM, bar: 'rgba(245,233,206,.7)'}, {bg: INK, art: RED, bar: 'rgba(245,233,206,.55)'},
+  {bg: PAPER2, art: RED, bar: 'rgba(43,36,28,.45)'}, {bg: RED2, art: CREAM, bar: 'rgba(245,233,206,.6)'}, {bg: CREAM, art: INK, bar: 'rgba(43,36,28,.4)'}];
+const CARD_ART = [
+  c => `<svg viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z" fill="${c}"/></svg>`,
+  c => `<svg viewBox="0 0 24 24"><path d="M12 1.5l3.1 6.9 7.4.7-5.6 5 1.6 7.4L12 17.8l-6.5 3.7 1.6-7.4-5.6-5 7.4-.7z" fill="${c}"/></svg>`,
+  c => `<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="${c}" stroke-width="2.4"/><path d="M3 9h18M3 15h18M8 4v16M16 4v16" stroke="${c}" stroke-width="1.6"/></svg>`,
+  c => `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="${c}" stroke-width="2.4"/><circle cx="12" cy="7.5" r="2" fill="${c}"/><circle cx="12" cy="16.5" r="2" fill="${c}"/><circle cx="7.5" cy="12" r="2" fill="${c}"/><circle cx="16.5" cy="12" r="2" fill="${c}"/></svg>`,
+];
+const rc = rng(31);
+function card(host, x, y, rot, sc) {
+  const st = CARD_STYLES[Math.floor(rc() * CARD_STYLES.length)], art = CARD_ART[Math.floor(rc() * CARD_ART.length)];
+  const d = document.createElement('div');
+  d.className = 'card';
+  d.style.cssText = `left:${x}px;top:${y}px;background:${st.bg};transform:rotate(${rot}deg) scale(${sc})`;
+  d.innerHTML = `<div class="art">${art(st.art)}</div><div class="tx"><i style="background:${st.bar}"></i><i style="background:${st.bar};width:60%"></i></div>`;
+  host.appendChild(d);
+}
+// caos: detrás de los paneles de la placa 2 y apilado a la izquierda de la placa 3
+for (let i = 0; i < 26; i++) {
+  let x, y;
+  if (i < 10) { x = 1080 + lerp(40, 1040, rc()); y = lerp(1090, 1300, rc()); }
+  else if (i < 16) { x = 1080 + (i % 2 ? lerp(110, 150, rc()) : lerp(950, 1060, rc())); y = lerp(150, 1050, rc()); }
+  else { x = 2160 + lerp(70, 430, rc()); y = lerp(600, 1250, rc()); }
+  card($('back'), x, y, (rc() - .5) * 70, 1);
+}
+for (let i = 0; i < 9; i++) card($('grid'), 626 + (i % 3) * 124 + 56, 634 + Math.floor(i / 3) * 170 + 78, 0, .74);
+
+// ---- pochoclos 3D (sprites de la Bóveda)
+function pc(x, y, s, v, f, rot = 0, layer = 'front', blur = false) {
+  const d = document.createElement('div');
+  d.className = 'pc' + (blur ? ' blur' : '');
+  d.style.cssText = `left:${x - s / 2}px;top:${y - s / 2}px;width:${s}px;height:${s}px;background-image:url(../../reel-boveda/assets/pop/pop_${String(v).padStart(2, '0')}.webp);` +
+    `background-size:${16 * s}px ${s}px;background-position:-${f * s}px 0;transform:rotate(${rot}deg)`;
+  $(layer).appendChild(d);
+}
+const POPS = [
+  // placa 1: alrededor del balde, uno que cruza a la placa 2
+  [1040, 880, 104, 2, 3, 10], [600, 1272, 76, 5, 9, -12], [1080, 560, 150, 7, 5, 8], [64, 600, 92, 1, 12, -6], [990, 150, 96, 4, 2, 14],
+  // placa 2 -> 3
+  [2160, 470, 120, 0, 7, -10],
+  // placa 4: explosión saliendo de la bóveda
+  [3500, 520, 110, 3, 1, 0], [3940, 560, 96, 6, 4, 12], [3440, 880, 90, 8, 10, -8], [4010, 900, 120, 9, 14, 6], [3700, 444, 84, 2, 8, 0],
+  [3880, 944, 80, 5, 6, -14], [3330, 700, 100, 4, 11, 10], [4130, 720, 90, 1, 2, -6], [3300, 180, 180, 7, 13, 0, 'front', true], [4270, 1240, 200, 0, 3, 0, 'front', true],
+  [4320, 300, 130, 6, 0, 8],
+  // placa 5 -> 6
+  [5400, 300, 110, 3, 6, -8],
+  // placa 7: alrededor del ticket
+  [6560, 640, 96, 2, 4, 10], [7420, 610, 104, 8, 9, -10], [7400, 880, 86, 4, 13, 6], [6590, 900, 80, 9, 1, -4],
+  // placa 7 -> 8 y cierre
+  [7560, 420, 130, 1, 10, 6], [8120, 1276, 70, 5, 7, -8], [7860, 1080, 70, 3, 2, 10],
+];
+POPS.forEach(p => pc(...p));
+
+// ---- marco continuo
+const fr = $('frame');
+const rule = (x, y, w, h, c = RED) => { const d = document.createElement('div'); d.className = 'rule'; d.style.cssText = `left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${c}`; fr.appendChild(d); };
+rule(26, 26, 8588, 5); rule(40, 40, 8560, 2); rule(26, 1319, 8588, 5); rule(40, 1308, 8560, 2);
+rule(26, 26, 5, 1298); rule(40, 40, 2, 1270); rule(8609, 26, 5, 1298); rule(8598, 40, 2, 1270);
+// sobre el rojo de la placa 4 el marco va en crema
+rule(3240, 26, 1080, 5, CREAM); rule(3240, 40, 1080, 2, CREAM); rule(3240, 1319, 1080, 5, CREAM); rule(3240, 1308, 1080, 2, CREAM);
+
+(async function init() {
+  await Promise.all(['400 40px Anton', '500 40px Oswald', '700 40px Oswald', '600 40px "Barlow SC"', '800 40px "Barlow SC"'].map(f => document.fonts.load(f, 'ÁÉÍÓÚáéíóú¿?$0123456789…→')));
+  await document.fonts.ready;
+  const urls = ['../assets/paper-pano.jpg', '../assets/wear-pano.png', '../../reel-boveda/assets/brush1.png', '../../reel-boveda/assets/brush2.png', '../../reel-boveda/assets/badge-rojo.png',
+    ...[...Array(10)].map((_, i) => `../../reel-boveda/assets/pop/pop_${String(i).padStart(2, '0')}.webp`)];
+  await Promise.all(urls.map(s => { const i = new Image(); i.src = s; return i.decode().catch(() => {}); }));
+  await Promise.all([...document.images].map(i => i.decode().catch(() => {})));
+  window.READY = true;
+})();
+</script>
+</body>
+</html>
