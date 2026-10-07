@@ -37,6 +37,7 @@ En Windows usá `python` donde los README dicen `python3`.
 
 - Los videos finales ya renderizados (ya los tenés de la sesión) y los archivos intermedios: se regeneran con los scripts.
 - Los tráilers de `reel-netflix/clips/` (88 MB): usá los tuyos.
+- El beat de `reel-netflix/audio/beat.wav`: se regenera con `python beat.py` dentro de `reel-netflix/src`.
 - `.git`: el historial completo está en GitHub, rama `ccr-3aa586de-24up3f` del repo `martinsc93v/martinsc93`.
 
 ## Estado al cerrar la sesión
