@@ -1,0 +1,8 @@
+clips/
+audio/
+output/_*
+output/preview/
+output/planos/
+output/timeline.json
+output/prueba-*
+__pycache__/

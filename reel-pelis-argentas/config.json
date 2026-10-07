@@ -1,0 +1,28 @@
+{
+  "fps": 30,
+  "song": {"file": "audio/cancion.mp3", "start": 0.0},
+  "shot_seconds": 0.83,
+  "shots_per_film": 4,
+  "hook": {
+    "top": "LAS ÚNICAS",
+    "big": "PELIS ARGENTAS",
+    "score": "10/10",
+    "sub": "EN MI OPINIÓN · PT. 1",
+    "seconds": 4.2,
+    "shots": [{"film": "argentina-1985", "start": 0, "focus": 0.5}]
+  },
+  "films": [
+    {"id": "nueve-reinas", "title": "NUEVE REINAS", "credit": "FABIÁN BIELINSKY | 2000", "color": "#7DDC9B",
+     "file": "clips/nueve-reinas.mp4", "shots": []},
+    {"id": "el-secreto-de-sus-ojos", "title": "EL SECRETO DE SUS OJOS", "credit": "JUAN JOSÉ CAMPANELLA | 2009", "color": "#F2B544",
+     "file": "clips/el-secreto-de-sus-ojos.mp4", "shots": []},
+    {"id": "relatos-salvajes", "title": "RELATOS SALVAJES", "credit": "DAMIÁN SZIFRON | 2014", "color": "#FF5A3C",
+     "file": "clips/relatos-salvajes.mp4", "shots": []},
+    {"id": "la-historia-oficial", "title": "LA HISTORIA OFICIAL", "credit": "LUIS PUENZO | 1985", "color": "#F2EFE4",
+     "file": "clips/la-historia-oficial.mp4", "shots": []},
+    {"id": "argentina-1985", "title": "ARGENTINA, 1985", "credit": "SANTIAGO MITRE | 2022", "color": "#74ACDF",
+     "file": "clips/argentina-1985.mp4", "shots": []}
+  ],
+  "outro": {"seconds": 2.6, "handle": "@elpochoclos", "ask": "¿CUÁL AGREGARÍAS?", "cta": "SEGUIME PARA LA PT. 2"},
+  "watermark": "EL POCHOCLOS"
+}
