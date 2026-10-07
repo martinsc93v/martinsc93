@@ -1,0 +1,194 @@
+{
+  "fps": 30,
+  "output": "netflix",
+  "netflix": true,
+  "song": {
+    "file": "audio/beat.wav",
+    "start": 0.0
+  },
+  "shot_seconds": 0.9,
+  "shots_per_film": 4,
+  "hook": {
+    "top": "5 PELIS QUE TENÉS QUE VER",
+    "big": "YA MISMO EN",
+    "score": "NETFLIX",
+    "sub": "RECOMENDADAS POR EL POCHOCLOS",
+    "seconds": 4.2,
+    "shots": [
+      {
+        "film": "risa",
+        "start": 9.6,
+        "focus": 0.55
+      },
+      {
+        "film": "risa",
+        "start": 50.2,
+        "focus": 0.55
+      }
+    ]
+  },
+  "films": [
+    {
+      "id": "train-dreams",
+      "title": "TRAIN DREAMS",
+      "credit": "CLINT BENTLEY | 2025",
+      "color": "#F2B544",
+      "file": "clips/train-dreams.mp4",
+      "crop": [
+        1572,
+        1080,
+        174,
+        0
+      ],
+      "shots": [
+        {
+          "start": 2.0,
+          "focus": 0.38
+        },
+        {
+          "start": 30.5,
+          "focus": 0.5
+        },
+        {
+          "start": 40.4,
+          "focus": 0.55
+        },
+        {
+          "start": 52.6,
+          "focus": 0.45
+        }
+      ]
+    },
+    {
+      "id": "left-handed-girl",
+      "title": "LEFT-HANDED GIRL",
+      "credit": "SHIH-CHING TSOU | 2025",
+      "color": "#FF6FA8",
+      "file": "clips/left-handed-girl.mp4",
+      "crop": [
+        1920,
+        804,
+        0,
+        138
+      ],
+      "shots": [
+        {
+          "start": 19.6,
+          "focus": 0.62
+        },
+        {
+          "start": 26.7,
+          "focus": 0.75
+        },
+        {
+          "start": 32.0,
+          "focus": 0.22
+        },
+        {
+          "start": 5.0,
+          "focus": 0.4
+        }
+      ]
+    },
+    {
+      "id": "remarkably-bright-creatures",
+      "title": "REMARKABLY BRIGHT CREATURES",
+      "credit": "OLIVIA NEWMAN | 2026",
+      "color": "#5FD4E8",
+      "file": "clips/remarkably-bright-creatures.mp4",
+      "crop": [
+        1920,
+        1036,
+        0,
+        22
+      ],
+      "shots": [
+        {
+          "start": 7.0,
+          "focus": 0.5
+        },
+        {
+          "start": 4.1,
+          "focus": 0.45
+        },
+        {
+          "start": 19.0,
+          "focus": 0.5
+        },
+        {
+          "start": 23.0,
+          "focus": 0.5
+        }
+      ]
+    },
+    {
+      "id": "hind-rajab",
+      "title": "THE VOICE OF HIND RAJAB",
+      "credit": "KAOUTHER BEN HANIA | 2025",
+      "color": "#F2EFE4",
+      "file": "clips/hind-rajab.mp4",
+      "crop": [
+        1920,
+        620,
+        0,
+        140
+      ],
+      "shots": [
+        {
+          "start": 10.3,
+          "focus": 0.45
+        },
+        {
+          "start": 23.0,
+          "focus": 0.47
+        },
+        {
+          "start": 68.5,
+          "focus": 0.42
+        },
+        {
+          "start": 70.7,
+          "focus": 0.55
+        }
+      ]
+    },
+    {
+      "id": "risa",
+      "title": "RISA Y LA CABINA DEL VIENTO",
+      "credit": "JUAN CABRAL | 2025",
+      "color": "#74ACDF",
+      "file": "clips/risa.mp4",
+      "crop": [
+        1920,
+        960,
+        0,
+        60
+      ],
+      "shots": [
+        {
+          "start": 12.65,
+          "focus": 0.45
+        },
+        {
+          "start": 23.0,
+          "focus": 0.42
+        },
+        {
+          "start": 63.7,
+          "focus": 0.4
+        },
+        {
+          "start": 84.0,
+          "focus": 0.5
+        }
+      ]
+    }
+  ],
+  "outro": {
+    "seconds": 2.8,
+    "handle": "@elpochoclos",
+    "ask": "¿CUÁL VISTE?",
+    "cta": "SEGUIME PARA MÁS RECOS"
+  },
+  "watermark": "EL POCHOCLOS"
+}

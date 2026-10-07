@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Títulos del reel</title>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:transparent}
+.L{position:absolute;inset:0}
+.row{position:absolute;left:0;width:1080px;text-align:center;white-space:nowrap}
+.mont{font-family:'Montserrat';font-weight:900;text-transform:uppercase;line-height:1}
+.cin{font-family:'Cinzel';font-weight:600;text-transform:uppercase}
+#dim{opacity:0}
+#hook,#film,#outro{display:none}
+#hTop{top:705px;font-size:34px;letter-spacing:.24em;padding-left:.24em;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.8)}
+#hBig{top:770px;font-size:112px;letter-spacing:-.01em}
+#hBig span{display:inline-block}
+#hScore{top:900px;font-size:178px;letter-spacing:-.02em}
+#hSub{top:1110px;font-size:30px;letter-spacing:.5em;padding-left:.5em;color:rgba(255,255,255,.88);text-shadow:0 2px 12px rgba(0,0,0,.8)}
+#fTitle{top:0;font-size:120px;letter-spacing:-.005em}
+#fCredit{font-size:28px;letter-spacing:.42em;padding-left:.42em;color:rgba(255,255,255,.9);text-shadow:0 2px 12px rgba(0,0,0,.85)}
+#wm{top:1400px;font-size:22px;letter-spacing:.6em;padding-left:.6em;color:rgba(255,255,255,.42)}
+#oBg{background:#0E0C0B}
+#oLogo{position:absolute;left:390px;top:560px;width:300px;height:300px}
+#oHandle{top:900px;font-size:92px;color:#F2EFE4;text-transform:none}
+#oAsk{top:1050px;font-size:40px;letter-spacing:.32em;padding-left:.32em;color:#F2B544}
+#oCta{top:1120px;font-size:30px;letter-spacing:.42em;padding-left:.42em;color:rgba(242,239,228,.8)}
+#flash{background:#fff;opacity:0}
+.nfx{font-family:'Bebas Neue';font-weight:400;color:#E50914;letter-spacing:.02em;line-height:1;text-shadow:0 4px 18px rgba(0,0,0,.75),0 0 2px rgba(0,0,0,.6)}
+#fBadge{font-size:70px;opacity:0}
+</style>
+</head>
+<body>
+<div class="L" id="dim"></div>
+<div class="L" id="hook">
+  <div class="row cin" id="hTop"></div>
+  <div class="row mont" id="hBig"></div>
+  <div class="row mont" id="hScore"></div>
+  <div class="row cin" id="hSub"></div>
+</div>
+<div class="L" id="film">
+  <div class="row nfx" id="fBadge">NETFLIX</div>
+  <div class="row mont" id="fTitle"></div>
+  <div class="row cin" id="fCredit"></div>
+</div>
+<div class="row cin" id="wm"></div>
+<div class="L" id="outro">
+  <div class="L" id="oBg"></div>
+  <img id="oLogo" src="../assets/logo-pocho.png">
+  <div class="row mont" id="oHandle"></div>
+  <div class="row cin" id="oAsk"></div>
+  <div class="row cin" id="oCta"></div>
+</div>
+<div class="L" id="flash"></div>
+<script>
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const P = (t, a, b) => clamp((t - a) / (b - a));
+const outBack = x => { const c1 = 1.7, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const outCubic = x => 1 - Math.pow(1 - x, 3);
+const glow = c => `0 0 10px ${c}, 0 0 34px ${c}AA, 0 0 70px ${c}55, 0 6px 26px rgba(0,0,0,.7)`;
+const HOOK_COLORS = ['#FFFFFF', '#74ACDF', '#F6B40E'];   // blanco, celeste y sol de mayo
+let CFG, TL;
+
+// título en una línea si entra grande; si no, en dos líneas balanceadas
+function setTitle(el, text) {
+  // se mide el texto (span en línea), no la caja de 1080 px
+  const fit = html => { el.innerHTML = `<span style="display:inline-block">${html}</span>`; return el.firstChild.getBoundingClientRect().width; };
+  el.style.lineHeight = '1';
+  // una sola línea si entra a 92 px o más (como en la referencia); si no, dos líneas balanceadas
+  for (let fs = 120; fs >= 92; fs -= 4) { el.style.fontSize = fs + 'px'; if (fit(text) <= 980) return 1; }
+  const words = text.split(' ');
+  let best = null;
+  for (let k = 1; k < words.length; k++) {
+    const a = words.slice(0, k).join(' '), b = words.slice(k).join(' ');
+    const d = Math.abs(a.length - b.length);
+    if (!best || d < best.d) best = {a, b, d};
+  }
+  el.style.lineHeight = '1.04';
+  let fs = 120;
+  el.style.fontSize = fs + 'px';
+  while (fit(`${best.a}<br>${best.b}`) > 980 && fs > 60) { fs -= 4; el.style.fontSize = fs + 'px'; }
+  return 2;
+}
+
+window.setup = function (cfg, tl) {
+  CFG = cfg; TL = tl;
+  $('hTop').textContent = cfg.hook.top;
+  $('hBig').innerHTML = [...cfg.hook.big].map(ch => `<span>${ch === ' ' ? '&nbsp;' : ch}</span>`).join('');
+  $('hScore').textContent = cfg.hook.score;
+  if (cfg.netflix) { $('hScore').className = 'row nfx'; $('hScore').style.fontSize = '230px'; $('hScore').style.top = '880px'; $('hSub').style.top = '1130px'; }
+  $('fBadge').style.display = cfg.netflix ? 'block' : 'none';
+  $('hSub').textContent = cfg.hook.sub;
+  $('wm').textContent = cfg.watermark;
+  $('oHandle').textContent = cfg.outro.handle;
+  $('oAsk').textContent = cfg.outro.ask;
+  $('oCta').textContent = cfg.outro.cta;
+};
+
+function beatIndex(seg, f) { let k = -1; for (const b of seg.beats) { if (f >= b) k++; } return k; }
+
+window.render = function (f) {
+  const seg = TL.segments.find(s => f >= s.f0 && f < s.f1) || TL.segments[TL.segments.length - 1];
+  const fps = TL.fps, t = (f - seg.f0) / fps;
+  $('hook').style.display = seg.kind === 'hook' ? 'block' : 'none';
+  $('film').style.display = seg.kind === 'film' ? 'block' : 'none';
+  $('outro').style.display = seg.kind === 'outro' ? 'block' : 'none';
+  $('wm').style.opacity = seg.kind === 'film' ? 1 : 0;
+  let flash = 0;
+
+  if (seg.kind === 'hook') {
+    const bt = (seg.beats[1] - seg.beats[0]) / fps;           // duración de un golpe
+    $('dim').style.cssText = `opacity:1;background:radial-gradient(ellipse 85% 40% at 50% 47%, rgba(0,0,0,.62), rgba(0,0,0,.25) 70%, rgba(0,0,0,.15))`;
+    const a = outCubic(P(t, 0, .45));
+    $('hTop').style.opacity = a; $('hTop').style.letterSpacing = (.9 - .35 * a) + 'em';
+    // "PELIS ARGENTAS": letra por letra durante el primer golpe y medio
+    const spans = $('hBig').children, n = spans.length;
+    const bi = beatIndex(seg, f);
+    const col = bi >= 3 ? HOOK_COLORS[(bi - 3) % 3] : '#FFFFFF';
+    [...spans].forEach((s, i) => {
+      const k = P(t, .15 + i * (bt * 1.4 / n), .15 + i * (bt * 1.4 / n) + .14);
+      s.style.opacity = k; s.style.transform = `translateY(${(1 - outCubic(k)) * 30}px) scale(${1.25 - .25 * outCubic(k)})`;
+      s.style.filter = `blur(${(1 - k) * 8}px)`;
+    });
+    $('hBig').style.color = col; $('hBig').style.textShadow = glow(col);
+    // "10/10" golpea en el tercer golpe
+    const sAt = seg.beats[Math.min(2, seg.beats.length - 1)];
+    const sk = P(f, sAt, sAt + 5);
+    $('hScore').style.opacity = f >= sAt ? 1 : 0;
+    $('hScore').style.transform = `scale(${1.6 - .6 * outBack(sk)})`;
+    if (!CFG.netflix) { $('hScore').style.color = col; $('hScore').style.textShadow = glow(col); }
+    if (f >= sAt && f < sAt + 2) flash = .35;
+    const sb = P(f, sAt + 6, sAt + 18);
+    $('hSub').style.opacity = sb; $('hSub').style.transform = `translateY(${(1 - outCubic(sb)) * 20}px)`;
+    // pulso en cada golpe
+    const lb = seg.beats[Math.max(0, bi)], pk = P(f, lb, lb + 6);
+    if (bi >= 3) $('hBig').style.transform = `scale(${1.05 - .05 * outCubic(pk)})`;
+  } else if (seg.kind === 'film') {
+    const film = CFG.films.find(x => x.id === seg.id);
+    $('dim').style.cssText = `opacity:1;background:linear-gradient(to bottom, rgba(0,0,0,0) 30%, rgba(0,0,0,.42) 44%, rgba(0,0,0,.42) 58%, rgba(0,0,0,0) 72%)`;
+    const ft = $('fTitle');
+    if (ft.dataset.id !== film.id) { ft.dataset.lines = setTitle(ft, film.title); ft.dataset.id = film.id; $('fCredit').textContent = film.credit; }
+    const lines = +ft.dataset.lines, h = ft.offsetHeight;
+    const top = 900 - h / 2 - 20;
+    ft.style.top = top + 'px'; $('fCredit').style.top = (top + h + 22) + 'px';
+    $('fBadge').style.top = (top - 86) + 'px'; $('fBadge').style.opacity = P(f, seg.f0 + 2, seg.f0 + 9);
+    ft.style.color = film.color; ft.style.textShadow = glow(film.color);
+    const k = P(f, seg.f0, seg.f0 + 7);
+    ft.style.opacity = k; ft.style.filter = `blur(${(1 - k) * 10}px)`;
+    // entra grande y se asienta; en cada corte, un pequeño pulso
+    const lc = seg.cuts.filter(c => f >= c).pop(), pk = P(f, lc, lc + 5);
+    ft.style.transform = `scale(${(1.18 - .18 * outCubic(k)) * (1.035 - .035 * outCubic(pk))})`;
+    const ck = P(f, seg.f0 + 4, seg.f0 + 14);
+    $('fCredit').style.opacity = ck; $('fCredit').style.letterSpacing = (.7 - .28 * outCubic(ck)) + 'em';
+    if (f - seg.f0 < 2) flash = .28;
+  } else {
+    $('dim').style.opacity = 0;
+    const k = outBack(P(t, 0, .45));
+    $('oLogo').style.transform = `scale(${.3 + .7 * k}) rotate(${(1 - P(t, 0, .45)) * -25}deg)`;
+    const a = outCubic(P(t, .2, .55));
+    $('oHandle').style.opacity = a; $('oHandle').style.transform = `translateY(${(1 - a) * 40}px)`;
+    const b = outCubic(P(t, .45, .8));
+    $('oAsk').style.opacity = b; $('oAsk').style.transform = `translateY(${(1 - b) * 24}px)`;
+    const c = outCubic(P(t, .65, 1.0));
+    $('oCta').style.opacity = c;
+  }
+  $('flash').style.opacity = flash;
+};
+(async () => {
+  await Promise.all(['900 40px Montserrat', '600 40px Cinzel', '400 40px "Bebas Neue"'].map(f => document.fonts.load(f, 'ÁÉÍÓÚ¿?0123456789,|·/')));
+  await document.fonts.ready;
+  await $('oLogo').decode().catch(() => {});
+  window.READY = true;
+})();
+</script>
+</body>
+</html>
