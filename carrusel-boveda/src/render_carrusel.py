@@ -2,6 +2,7 @@
 
 Uso: python3 render_carrusel.py  -> output/placa-01.jpg ... placa-08.jpg + output/vista-completa.jpg
 """
+import os
 from io import BytesIO
 from pathlib import Path
 
@@ -15,7 +16,7 @@ CHROMIUM = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome"
 
 OUT.mkdir(exist_ok=True)
 with sync_playwright() as p:
-    b = p.chromium.launch(executable_path=CHROMIUM, args=["--allow-file-access-from-files", "--force-color-profile=srgb"])
+    b = p.chromium.launch(executable_path=CHROMIUM if os.path.exists(CHROMIUM) else None, args=["--allow-file-access-from-files", "--force-color-profile=srgb"])
     page = b.new_page(viewport={"width": W * N, "height": H}, device_scale_factor=1)
     page.goto((ROOT / "src" / "carrusel.html").as_uri())
     page.wait_for_function("window.READY === true", timeout=120_000)

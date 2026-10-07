@@ -4,6 +4,7 @@ Uso:
   python3 render.py preview 0.2 2.4 ...   -> PNGs sueltos + hoja de contactos en output/preview/
   python3 render.py video                 -> output/_video_mudo_raw.mp4 (sin audio, 1080x1920, 30 fps)
 """
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -19,7 +20,7 @@ CHROMIUM = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome"
 
 
 def open_page(p):
-    browser = p.chromium.launch(executable_path=CHROMIUM, args=["--allow-file-access-from-files", "--force-color-profile=srgb"])
+    browser = p.chromium.launch(executable_path=CHROMIUM if os.path.exists(CHROMIUM) else None, args=["--allow-file-access-from-files", "--force-color-profile=srgb"])
     page = browser.new_page(viewport={"width": 1080, "height": 1920}, device_scale_factor=1)
     page.goto(HTML.as_uri())
     page.wait_for_function("window.READY === true", timeout=120_000)

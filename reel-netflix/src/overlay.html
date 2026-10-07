@@ -21,11 +21,13 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:transparent}
 #fTitle{top:0;font-size:120px;letter-spacing:-.005em}
 #fCredit{font-size:28px;letter-spacing:.42em;padding-left:.42em;color:rgba(255,255,255,.9);text-shadow:0 2px 12px rgba(0,0,0,.85)}
 #wm{top:1400px;font-size:22px;letter-spacing:.6em;padding-left:.6em;color:rgba(255,255,255,.42)}
-#oBg{background:#0E0C0B}
-#oLogo{position:absolute;left:390px;top:560px;width:300px;height:300px}
-#oHandle{top:900px;font-size:92px;color:#F2EFE4;text-transform:none}
-#oAsk{top:1050px;font-size:40px;letter-spacing:.32em;padding-left:.32em;color:#F2B544}
-#oCta{top:1120px;font-size:30px;letter-spacing:.42em;padding-left:.42em;color:rgba(242,239,228,.8)}
+#oBg{background:radial-gradient(ellipse 70% 38% at 50% 37%, #5a1a12 0%, #2a0f0a 45%, #120a07 75%, #0a0705 100%)}
+#oPop{position:absolute;inset:0}
+#oShade{background:linear-gradient(to bottom, rgba(10,7,5,.55) 0%, rgba(10,7,5,0) 22%, rgba(10,7,5,0) 62%, rgba(10,7,5,.35) 74%, rgba(10,7,5,0) 86%)}
+#oLogo{position:absolute;left:370px;top:520px;width:340px;height:340px;filter:drop-shadow(0 20px 40px rgba(0,0,0,.7)) drop-shadow(0 0 60px rgba(229,9,20,.35))}
+#oHandle{top:905px;text-shadow:0 6px 30px rgba(0,0,0,.9);font-size:92px;color:#F2EFE4;text-transform:none}
+#oAsk{top:1050px;text-shadow:0 4px 18px rgba(0,0,0,.95);font-size:40px;letter-spacing:.32em;padding-left:.32em;color:#F2B544}
+#oCta{top:1120px;text-shadow:0 4px 18px rgba(0,0,0,.95);font-size:30px;letter-spacing:.42em;padding-left:.42em;color:rgba(242,239,228,.8)}
 #flash{background:#fff;opacity:0}
 .nfx{font-family:'Bebas Neue';font-weight:400;color:#E50914;letter-spacing:.02em;line-height:1;text-shadow:0 4px 18px rgba(0,0,0,.75),0 0 2px rgba(0,0,0,.6)}
 #fBadge{font-size:70px;opacity:0}
@@ -47,6 +49,8 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:transparent}
 <div class="row cin" id="wm"></div>
 <div class="L" id="outro">
   <div class="L" id="oBg"></div>
+  <canvas id="oPop" width="1080" height="1920"></canvas>
+  <div class="L" id="oShade"></div>
   <img id="oLogo" src="../assets/logo-pocho.png">
   <div class="row mont" id="oHandle"></div>
   <div class="row cin" id="oAsk"></div>
@@ -156,6 +160,7 @@ window.render = function (f) {
     if (f - seg.f0 < 2) flash = .28;
   } else {
     $('dim').style.opacity = 0;
+    drawOutro(t);
     const k = outBack(P(t, 0, .45));
     $('oLogo').style.transform = `scale(${.3 + .7 * k}) rotate(${(1 - P(t, 0, .45)) * -25}deg)`;
     const a = outCubic(P(t, .2, .55));
@@ -167,7 +172,53 @@ window.render = function (f) {
   }
   $('flash').style.opacity = flash;
 };
+// ---- cierre: fondo de pochoclos 3D realistas (sprites de popcorn3d.py, 16 cuadros de giro)
+const SHEETS = [...Array(10)].map((_, i) => { const im = new Image(); im.src = `../assets/pop/pop_${String(i).padStart(2, '0')}.webp`; return im; });
+function rnd(seed) { return () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; }
+const PILE = [], RAIN = [], BURST = [];
+(function () {
+  const r = rnd(42);
+  // montaña abajo (de atrás hacia adelante para que se superpongan bien)
+  for (let i = 0; i < 230; i++) {
+    const x = r() * 1180 - 50, depth = r();
+    const y = 1330 + depth * 640 + Math.sin(x / 140) * 30;
+    PILE.push({x, y, s: 95 + depth * 85 + r() * 25, v: Math.floor(r() * 10), f: Math.floor(r() * 16), rot: (r() - .5) * 40, d: depth});
+  }
+  PILE.sort((a, b) => a.y - b.y);
+  for (let i = 0; i < 26; i++) RAIN.push({x: r() * 1080, y0: -200 - r() * 1600, v: 380 + r() * 380, s: 55 + r() * 70, w: r() * 6, sp: 10 + r() * 14,
+    vv: Math.floor(r() * 10), f0: r() * 16, rot: (r() - .5) * 40, blur: r() < .3});
+  for (let i = 0; i < 26; i++) { const a = -Math.PI * (.08 + .84 * r()), sp = 900 + r() * 1300;
+    BURST.push({vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, s: 60 + r() * 60, vv: Math.floor(r() * 10), f0: r() * 16, sp: 18 + r() * 14}); }
+})();
+function sprite(ctx, p, x, y, s, fr, alpha = 1, blur = 0, shade = 1) {
+  ctx.save(); ctx.globalAlpha = alpha; ctx.translate(x, y); ctx.rotate((p.rot || 0) * Math.PI / 180);
+  ctx.filter = `${blur ? `blur(${blur}px) ` : ''}sepia(.28) saturate(1.3) brightness(${shade})`;
+  ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = s * .18; ctx.shadowOffsetY = s * .08;
+  ctx.drawImage(SHEETS[p.vv ?? p.v], (((Math.floor(fr) % 16) + 16) % 16) * 256, 0, 256, 256, -s / 2, -s / 2, s, s);
+  ctx.restore();
+}
+function drawOutro(t) {
+  const c = $('oPop').getContext('2d');
+  c.clearRect(0, 0, 1080, 1920);
+  // lluvia suave detrás
+  for (const p of RAIN) {
+    const y = p.y0 + p.v * (t + 2.2);
+    if (y < -150 || y > 2000) continue;
+    sprite(c, p, p.x + Math.sin(t * 2 + p.w) * 18, y, p.s, p.f0 + p.sp * t, .85, p.blur ? 5 : 0, .8);
+  }
+  // la montaña sube desde abajo al entrar
+  const rise = (1 - outCubic(P(t, 0, .5))) * 500;
+  for (const p of PILE) sprite(c, p, p.x, p.y + rise, p.s, p.f, 1, 0, .62 + .45 * p.d);
+  // estallido de pochoclos cuando aparece el logo
+  for (const p of BURST) {
+    const d = t - .08; if (d < 0 || d > 1.6) continue;
+    const x = 540 + p.vx * d, y = 700 + p.vy * d + 1400 * d * d;
+    sprite(c, p, x, y, p.s * Math.min(1, .3 + d * 4), p.f0 + p.sp * d, 1 - P(d, 1.1, 1.6));
+  }
+}
+
 (async () => {
+  await Promise.all(SHEETS.map(i => i.decode().catch(() => {})));
   await Promise.all(['900 40px Montserrat', '600 40px Cinzel', '400 40px "Bebas Neue"'].map(f => document.fonts.load(f, 'ÁÉÍÓÚ¿?0123456789,|·/')));
   await document.fonts.ready;
   await $('oLogo').decode().catch(() => {});

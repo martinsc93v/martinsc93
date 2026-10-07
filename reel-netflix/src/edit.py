@@ -6,6 +6,7 @@ Uso:
   python3 edit.py --test     -> lo mismo con clips y canción de prueba generados (para probar la plantilla)
   python3 edit.py --preview 3.2 10 18   -> cuadros sueltos en output/preview/
 """
+import os
 import json
 import re
 import shutil
@@ -71,7 +72,7 @@ def render_overlay(cfg, tl, frames, outdir):
     from playwright.sync_api import sync_playwright
     outdir.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as p:
-        b = p.chromium.launch(executable_path=CHROMIUM, args=["--allow-file-access-from-files"])
+        b = p.chromium.launch(executable_path=CHROMIUM if os.path.exists(CHROMIUM) else None, args=["--allow-file-access-from-files"])
         page = b.new_page(viewport={"width": W, "height": H})
         page.goto((ROOT / "src" / "overlay.html").as_uri())
         page.wait_for_function("window.READY === true", timeout=60_000)
